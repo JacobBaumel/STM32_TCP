@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -77,7 +77,11 @@ void ledTaskFunction(void* argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int __io_putchar(int ch) {
+    char cha = ch;
+    HAL_UART_Transmit(&huart3, &cha, 1, HAL_MAX_DELAY);
+    return ch;
+}
 /* USER CODE END 0 */
 
 /**
@@ -306,6 +310,7 @@ static void MX_GPIO_Init(void) {
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void* argument) {
     /* init code for LWIP */
+    while(1) osDelay(1000);
     MX_LWIP_Init();
     /* USER CODE BEGIN 5 */
     /* Infinite loop */
@@ -326,7 +331,9 @@ void ledTaskFunction(void* argument) {
     /* USER CODE BEGIN ledTaskFunction */
     /* Infinite loop */
     for(;;) {
-        osDelay(1);
+        osDelay(1000);
+        HAL_GPIO_TogglePin(led_GPIO_Port, led_Pin);
+        printf("Helo World\n");
     }
     /* USER CODE END ledTaskFunction */
 }
