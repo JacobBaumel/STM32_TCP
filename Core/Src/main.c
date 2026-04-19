@@ -89,6 +89,7 @@ int __io_putchar(int ch) {
  * @retval int
  */
 int main(void) {
+
     /* USER CODE BEGIN 1 */
 
     /* USER CODE END 1 */
@@ -229,6 +230,7 @@ void SystemClock_Config(void) {
  * @retval None
  */
 static void MX_USART3_UART_Init(void) {
+
     /* USER CODE BEGIN USART3_Init 0 */
 
     /* USER CODE END USART3_Init 0 */
@@ -310,7 +312,6 @@ static void MX_GPIO_Init(void) {
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void* argument) {
     /* init code for LWIP */
-    while(1) osDelay(1000);
     MX_LWIP_Init();
     /* USER CODE BEGIN 5 */
     /* Infinite loop */
@@ -333,7 +334,7 @@ void ledTaskFunction(void* argument) {
     for(;;) {
         osDelay(1000);
         HAL_GPIO_TogglePin(led_GPIO_Port, led_Pin);
-        printf("Helo World\n");
+        // printf("Helo World\n");
     }
     /* USER CODE END ledTaskFunction */
 }
@@ -359,6 +360,20 @@ void MPU_Config(void) {
     MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
     MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
     MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+
+    HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+    /** Initializes and configures the Region and the memory to be protected
+     */
+    MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+    MPU_InitStruct.BaseAddress = 0x08000000;
+    MPU_InitStruct.Size = MPU_REGION_SIZE_2MB;
+    MPU_InitStruct.SubRegionDisable = 0x0;
+    MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
+    MPU_InitStruct.AccessPermission = MPU_REGION_PRIV_RO;
+    MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+    MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+    MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
 
     HAL_MPU_ConfigRegion(&MPU_InitStruct);
     /* Enables the MPU */

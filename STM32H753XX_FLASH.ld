@@ -240,6 +240,23 @@ SECTIONS
     . = ALIGN(8);
   } >DTCMRAM
 
+  .LWIP (NOLOAD) :
+  {
+    . = ABSOLUTE(0x30000000);
+    *(.Rx_PoolSection)
+  } > RAM_D2
+
+  .RXDESCRIPTORS (NOLOAD) :
+  {
+    . = ABSOLUTE(0x30003E00);
+    *(.RxDecripSection)
+  } > RAM_D2
+
+  .TXDESCRIPTORS (NOLOAD) :
+  {
+    . = ABSOLUTE(0x30003F00);
+    *(.TxDecripSection)
+  } > RAM_D2
 
 
   /* Remove information from the standard libraries */

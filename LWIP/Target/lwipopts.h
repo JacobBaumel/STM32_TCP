@@ -120,11 +120,24 @@ extern "C" {
 #define CHECKSUM_CHECK_ICMP6 0
 /*----- Default Value for ETHARP_DEBUG: LWIP_DBG_OFF ---*/
 #define ETHARP_DEBUG LWIP_DBG_ON
+/*----- Default Value for NETIF_DEBUG: LWIP_DBG_OFF ---*/
+#define NETIF_DEBUG LWIP_DBG_ON
 /*----- Default Value for ICMP_DEBUG: LWIP_DBG_OFF ---*/
 #define ICMP_DEBUG LWIP_DBG_ON
+/*----- Default Value for IP_DEBUG: LWIP_DBG_OFF ---*/
+#define IP_DEBUG LWIP_DBG_ON
 /*-----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
+#define LWIP_DEBUG 1
 
+#include <stdio.h>
+
+#define LWIP_PLATFORM_DIAG(x)                                                                                          \
+    do {                                                                                                               \
+        printf x;                                                                                                      \
+        fflush(0);                                                                                                     \
+    }                                                                                                                  \
+    while(0)
 /* USER CODE END 1 */
 
 #ifdef __cplusplus
