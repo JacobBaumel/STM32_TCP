@@ -97,6 +97,14 @@ int main(void) {
     /* MPU Configuration--------------------------------------------------------*/
     MPU_Config();
 
+    /* Enable the CPU Cache */
+
+    /* Enable I-Cache---------------------------------------------------------*/
+    SCB_EnableICache();
+
+    /* Enable D-Cache---------------------------------------------------------*/
+    SCB_EnableDCache();
+
     /* MCU Configuration--------------------------------------------------------*/
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -300,7 +308,9 @@ static void MX_GPIO_Init(void) {
 }
 
 /* USER CODE BEGIN 4 */
-
+// We have this dummy variable defined at 0x3004000 that way gcc doesnt accidentally allocate something
+// inside our lwip ram block
+[[gnu::section(".LWIP_RAM")]] volatile uint8_t LWIP_RAM[16000];
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -314,6 +324,13 @@ void StartDefaultTask(void* argument) {
     /* init code for LWIP */
     MX_LWIP_Init();
     /* USER CODE BEGIN 5 */
+
+    // See USER CODE BEGIN 4, this prevents the variable getting optimized out
+    (void) LWIP_RAM[0];
+    // Memory protection settings:
+    //  - Regions 0 and 1 are default
+    //  - Region 2 is used to protect the Rx buffer and dma descriptors from ethernetif.c
+    //  - Region 3 is used to protect the LWIP ram segment that has the tx buffers
     /* Infinite loop */
     for(;;) {
         osDelay(1);
@@ -374,6 +391,26 @@ void MPU_Config(void) {
     MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
     MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
     MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
+
+    HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+    /** Initializes and configures the Region and the memory to be protected
+     */
+    MPU_InitStruct.Number = MPU_REGION_NUMBER2;
+    MPU_InitStruct.BaseAddress = 0x30000000;
+    MPU_InitStruct.Size = MPU_REGION_SIZE_32KB;
+    MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+    MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+    MPU_InitStruct.IsShareable = MPU_ACCESS_SHAREABLE;
+    MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+
+    HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+    /** Initializes and configures the Region and the memory to be protected
+     */
+    MPU_InitStruct.Number = MPU_REGION_NUMBER3;
+    MPU_InitStruct.BaseAddress = 0x30004000;
+    MPU_InitStruct.Size = MPU_REGION_SIZE_16KB;
 
     HAL_MPU_ConfigRegion(&MPU_InitStruct);
     /* Enables the MPU */

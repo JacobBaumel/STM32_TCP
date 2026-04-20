@@ -51,16 +51,20 @@ extern "C" {
 #define ETH_RX_BUFFER_SIZE 1536
 /*----- Default Value for LWIP_UDP: 1 ---*/
 #define LWIP_UDP 0
+/*----- Default Value for MEMP_NUM_UDP_PCB: 4 ---*/
+#define MEMP_NUM_UDP_PCB 1
 /*----- Value in opt.h for LWIP_TCP: 1 -----*/
 #define LWIP_TCP 0
+/*----- Default Value for MEMP_NUM_TCP_PCB: 5 ---*/
+#define MEMP_NUM_TCP_PCB 1
 /*----- Value in opt.h for MEM_ALIGNMENT: 1 -----*/
 #define MEM_ALIGNMENT 4
 /*----- Default Value for MEM_SIZE: 1600 ---*/
-#define MEM_SIZE 16384
+#define MEM_SIZE 16000
 /*----- Default Value for H7 devices: 0x30004000 -----*/
-#define LWIP_RAM_HEAP_POINTER 0x30040000
+#define LWIP_RAM_HEAP_POINTER 0x30004000
 /*----- Default Value for MEMP_NUM_TCP_PCB_LISTEN: 8 ---*/
-#define MEMP_NUM_TCP_PCB_LISTEN 2
+#define MEMP_NUM_TCP_PCB_LISTEN 1
 /*----- Value supported for H7 devices: 1 -----*/
 #define LWIP_SUPPORT_CUSTOM_PBUF 1
 /*----- Value in opt.h for LWIP_ETHERNET: LWIP_ARP || PPPOE_SUPPORT -*/

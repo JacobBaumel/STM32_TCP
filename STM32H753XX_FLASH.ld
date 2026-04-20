@@ -258,6 +258,12 @@ SECTIONS
     *(.TxDecripSection)
   } > RAM_D2
 
+  .LWIPRAM (NOLOAD) :
+  {
+    . = ABSOLUTE(0x30004000);
+    *(.LWIP_RAM)
+  } > RAM_D2
+
 
   /* Remove information from the standard libraries */
   /DISCARD/ :
