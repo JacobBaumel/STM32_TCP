@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "socket.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -311,6 +312,8 @@ static void MX_GPIO_Init(void) {
 // We have this dummy variable defined at 0x3004000 that way gcc doesnt accidentally allocate something
 // inside our lwip ram block
 [[gnu::section(".LWIP_RAM")]] volatile uint8_t LWIP_RAM[16000];
+
+uint8_t eth_rx_buf[128];
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -331,6 +334,69 @@ void StartDefaultTask(void* argument) {
     //  - Regions 0 and 1 are default
     //  - Region 2 is used to protect the Rx buffer and dma descriptors from ethernetif.c
     //  - Region 3 is used to protect the LWIP ram segment that has the tx buffers
+
+    // TCP socket stuff
+    int sock = lwip_socket(AF_INET, SOCK_STREAM, 0);
+
+    struct sockaddr_in serveradd;
+    serveradd.sin_family = AF_INET;
+    serveradd.sin_addr.s_addr = htonl(INADDR_ANY);
+    serveradd.sin_port = htons(8000);
+
+    if((lwip_bind(sock, (struct sockaddr*) &serveradd, sizeof(serveradd))) != ERR_OK) {
+        printf("socket bind failed...\n");
+        while(1) osDelay(1000);
+    }
+
+    printf("Socket successfully bound!\n");
+
+
+    if((lwip_listen(sock, 5)) != ERR_OK) {
+        printf("Listen failed...\n");
+        while(1);
+    }
+
+    printf("Server listening..\n");
+
+    // Accept the data packet from client and verification
+    struct sockaddr_in cli;
+    socklen_t len = sizeof(cli);
+    int connfd = lwip_accept(sock, (struct sockaddr*) &cli, &len);
+    if(connfd < 0) {
+        printf("server accept failed...\n");
+        while(1);
+    }
+
+    printf("server accept the client...\n");
+
+    struct pollfd pfd = {
+        .fd = connfd,
+        .events = POLLIN | POLLRDNORM,
+        .revents = 0
+    };
+
+    while(1) {
+        int ret = lwip_poll(&pfd, 1, 1000);
+
+        if(ret > 0) {
+            if(pfd.revents == POLLIN) {
+                ssize_t bytes = lwip_read(connfd, eth_rx_buf, 128);
+                if(bytes > 0) {
+                    if(lwip_write(connfd, eth_rx_buf, bytes) != bytes) {
+                        printf("Didnt send all data back\n");
+                    }
+                }
+            }
+        }
+
+        else if(ret < 0) {
+            printf("Poll error\n");
+            while(1);
+        }
+
+        else printf("No data\n");
+    }
+
     /* Infinite loop */
     for(;;) {
         osDelay(1);

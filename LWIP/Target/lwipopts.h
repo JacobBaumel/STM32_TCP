@@ -49,12 +49,8 @@ extern "C" {
 /* Parameters set in STM32CubeMX LwIP Configuration GUI -*/
 /*----- Default value in ETH configuration GUI in CubeMx: 1524 -----*/
 #define ETH_RX_BUFFER_SIZE 1536
-/*----- Default Value for LWIP_UDP: 1 ---*/
-#define LWIP_UDP 0
 /*----- Default Value for MEMP_NUM_UDP_PCB: 4 ---*/
 #define MEMP_NUM_UDP_PCB 1
-/*----- Value in opt.h for LWIP_TCP: 1 -----*/
-#define LWIP_TCP 0
 /*----- Default Value for MEMP_NUM_TCP_PCB: 5 ---*/
 #define MEMP_NUM_TCP_PCB 1
 /*----- Value in opt.h for MEM_ALIGNMENT: 1 -----*/
@@ -96,12 +92,12 @@ extern "C" {
 #define DEFAULT_THREAD_STACKSIZE 1024
 /*----- Value in opt.h for DEFAULT_THREAD_PRIO: 1 -----*/
 #define DEFAULT_THREAD_PRIO 3
+/*----- Value in opt.h for DEFAULT_UDP_RECVMBOX_SIZE: 0 -----*/
+#define DEFAULT_UDP_RECVMBOX_SIZE 6
+/*----- Value in opt.h for DEFAULT_TCP_RECVMBOX_SIZE: 0 -----*/
+#define DEFAULT_TCP_RECVMBOX_SIZE 6
 /*----- Value in opt.h for DEFAULT_ACCEPTMBOX_SIZE: 0 -----*/
 #define DEFAULT_ACCEPTMBOX_SIZE 6
-/*----- Value in opt.h for LWIP_NETCONN: 1 -----*/
-#define LWIP_NETCONN 0
-/*----- Value in opt.h for LWIP_SOCKET: 1 -----*/
-#define LWIP_SOCKET 0
 /*----- Value in opt.h for RECV_BUFSIZE_DEFAULT: INT_MAX -----*/
 #define RECV_BUFSIZE_DEFAULT 2000000000
 /*----- Value in opt.h for LWIP_STATS: 1 -----*/
@@ -123,16 +119,16 @@ extern "C" {
 /*----- Value in opt.h for CHECKSUM_CHECK_ICMP6: 1 -----*/
 #define CHECKSUM_CHECK_ICMP6 0
 /*----- Default Value for ETHARP_DEBUG: LWIP_DBG_OFF ---*/
-#define ETHARP_DEBUG LWIP_DBG_ON
+#define ETHARP_DEBUG LWIP_DBG_OFF
 /*----- Default Value for NETIF_DEBUG: LWIP_DBG_OFF ---*/
-#define NETIF_DEBUG LWIP_DBG_ON
+#define NETIF_DEBUG LWIP_DBG_OFF
 /*----- Default Value for ICMP_DEBUG: LWIP_DBG_OFF ---*/
-#define ICMP_DEBUG LWIP_DBG_ON
+#define ICMP_DEBUG LWIP_DBG_OFF
 /*----- Default Value for IP_DEBUG: LWIP_DBG_OFF ---*/
-#define IP_DEBUG LWIP_DBG_ON
+#define IP_DEBUG LWIP_DBG_OFF
+#define TCP_DEBUG LWIP_DBG_OFF
 /*-----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
-#define LWIP_DEBUG 1
 
 #include <stdio.h>
 
