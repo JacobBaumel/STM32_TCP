@@ -129,15 +129,7 @@ extern "C" {
 #define TCP_DEBUG LWIP_DBG_OFF
 /*-----------------------------------------------------------------------------*/
 /* USER CODE BEGIN 1 */
-
-#include <stdio.h>
-
-#define LWIP_PLATFORM_DIAG(x)                                                                                          \
-    do {                                                                                                               \
-        printf x;                                                                                                      \
-        fflush(0);                                                                                                     \
-    }                                                                                                                  \
-    while(0)
+// #define LWIP_DEBUG
 
 /* USER CODE END 1 */
 
