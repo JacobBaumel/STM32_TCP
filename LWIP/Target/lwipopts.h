@@ -131,6 +131,9 @@ extern "C" {
 /* USER CODE BEGIN 1 */
 // #define LWIP_DEBUG
 
+// See nonintrinsic_memcpy.c
+void* nonintrinsic_memcpy(void* dest, const void* src, size_t bytes);
+#define SMEMCPY(dest, src, len) nonintrinsic_memcpy(dest, src, len)
 /* USER CODE END 1 */
 
 #ifdef __cplusplus
