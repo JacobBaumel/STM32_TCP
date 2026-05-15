@@ -80,7 +80,7 @@ void ledTaskFunction(void* argument);
 /* USER CODE BEGIN 0 */
 int __io_putchar(int ch) {
     char cha = ch;
-    HAL_UART_Transmit(&huart3, &cha, 1, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart3, (uint8_t*) &cha, 1, HAL_MAX_DELAY);
     return ch;
 }
 /* USER CODE END 0 */
